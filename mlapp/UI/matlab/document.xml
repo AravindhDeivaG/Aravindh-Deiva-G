@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[classdef UI < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure                  matlab.ui.Figure
+        URDFpathEditField         matlab.ui.control.EditField
+        URDFpathEditFieldLabel    matlab.ui.control.Label
+        MasterSlaveButtonGroup_2  matlab.ui.container.ButtonGroup
+        slaveButton_2             matlab.ui.control.ToggleButton
+        masterButton_2            matlab.ui.control.ToggleButton
+        Ros_INITButton            matlab.ui.control.StateButton
+        FKIKButtonGroup           matlab.ui.container.ButtonGroup
+        IKButton                  matlab.ui.control.ToggleButton
+        FKButton                  matlab.ui.control.ToggleButton
+        joint_4Slider             matlab.ui.control.Slider
+        joint_4SliderLabel        matlab.ui.control.Label
+        joint_5Slider             matlab.ui.control.Slider
+        joint_5SliderLabel        matlab.ui.control.Label
+        joint_3Slider             matlab.ui.control.Slider
+        joint_3SliderLabel        matlab.ui.control.Label
+        joint_1Slider             matlab.ui.control.Slider
+        joint_1SliderLabel        matlab.ui.control.Label
+        Joint_2Slider             matlab.ui.control.Slider
+        Joint_2SliderLabel        matlab.ui.control.Label
+        joint_6Slider             matlab.ui.control.Slider
+        joint_6SliderLabel        matlab.ui.control.Label
+        UIAxes                    matlab.ui.control.UIAxes
+    end
+
+    % Callbacks that handle component events
+    methods (Access = private)
+
+        % Value changed function: Ros_INITButton
+        function Ros_INITButtonValueChanged(app, event)
+            global pub_1_1 pub_2_1 pub_3_1 pub_4_1 pub_5_1 pub_6_1;
+            global pub_1_2 pub_2_2 pub_3_2 pub_4_2 pub_5_2 pub_6_2;
+            global master_slave_val command;
+            master_slave_val = app.MasterSlaveButtonGroup_2.SelectedObject;
+            value = app.Ros_INITButton.Value;
+            robot = import
+            if(value==1)
+                rosinit;
+                pub_1_1 = rospublisher('/abb_irb140/joint1_position_controller_1/command');
+                pub_2_1 = rospublisher('/abb_irb140/joint2_position_controller_1/command');
+                pub_3_1 = rospublisher('/abb_irb140/joint3_position_controller_1/command');
+                pub_4_1 = rospublisher('/abb_irb140/joint4_position_controller_1/command');
+                pub_5_1 = rospublisher('/abb_irb140/joint5_position_controller_1/command');
+                pub_6_1 = rospublisher('/abb_irb140/joint6_position_controller_1/command');
+                
+                pub_1_2 = rospublisher('/abb_irb140/joint1_position_controller_2/command');
+                pub_2_2 = rospublisher('/abb_irb140/joint2_position_controller_2/command');
+                pub_3_2 = rospublisher('/abb_irb140/joint3_position_controller_2/command');
+                pub_4_2 = rospublisher('/abb_irb140/joint4_position_controller_2/command');
+                pub_5_2 = rospublisher('/abb_irb140/joint5_position_controller_2/command');
+                pub_6_2 = rospublisher('/abb_irb140/joint6_position_controller_2/command');
+                command = rosmessage(pub_1_1);
+            else
+                rosshutdown;
+                clear pub_1_1 pub_2_1 pub_3_1 pub_4_1 pub_5_1 pub_6_1;
+                clear pub_1_2 pub_2_2 pub_3_2 pub_4_2 pub_5_2 pub_6_2;
+            end
+        end
+
+        % Selection changed function: MasterSlaveButtonGroup_2
+        function MasterSlaveButtonGroup_2SelectionChanged(app, event)
+            selectedButton = app.MasterSlaveButtonGroup_2.SelectedObject;
+            global master_slave_val;
+            master_slave_val = selectedButton;
+        end
+
+        % Value changing function: joint_1Slider
+        function joint_1SliderValueChanging(app, event)
+            changingValue = event.Value;
+            global pub_1_1 pub_1_2 master_slave_val command;
+            command.Data = changingValue;
+            if(master_slave_val.Text(1)=='m')
+                send(pub_1_1,command);
+            else
+                send(pub_1_2,command);
+            end
+        end
+
+        % Value changing function: Joint_2Slider
+        function Joint_2SliderValueChanging(app, event)
+            changingValue = event.Value;
+            global pub_2_1 pub_2_2 master_slave_val command;
+            command.Data = changingValue;
+            if(master_slave_val.Text(1)=='m')
+                send(pub_2_1,command);
+            else
+                send(pub_2_2,command);
+            end
+        end
+
+        % Value changing function: joint_3Slider
+        function joint_3SliderValueChanging(app, event)
+            changingValue = event.Value;
+            global pub_3_1 pub_3_2 master_slave_val command;
+            command.Data = changingValue;
+            if(master_slave_val.Text(1)=='m')
+                send(pub_3_1,command);
+            else
+                send(pub_3_2,command);
+            end
+        end
+
+        % Value changing function: joint_4Slider
+        function joint_4SliderValueChanging(app, event)
+            changingValue = event.Value;
+            global pub_4_1 pub_4_2 master_slave_val command;
+            command.Data = changingValue;
+            if(master_slave_val.Text(1)=='m')
+                send(pub_4_1,command);
+            else
+                send(pub_4_2,command);
+            end
+        end
+
+        % Value changing function: joint_5Slider
+        function joint_5SliderValueChanging(app, event)
+            changingValue = event.Value;
+            global pub_5_1 pub_5_2 master_slave_val command;
+            command.Data = changingValue;
+            if(master_slave_val.Text(1)=='m')
+                send(pub_5_1,command);
+            else
+                send(pub_5_2,command);
+            end
+        end
+
+        % Value changing function: joint_6Slider
+        function joint_6SliderValueChanging(app, event)
+            changingValue = event.Value;
+            global pub_6_1 pub_6_2 master_slave_val command;
+            command.Data = changingValue;
+            if(master_slave_val.Text(1)=='m')
+                send(pub_6_1,command);
+            else
+                send(pub_6_2,command);
+            end
+        end
+
+        % Value changed function: URDFpathEditField
+        function URDFpathEditFieldValueChanged(app, event)
+            value = app.URDFpathEditField.Value
+            robot = importrobot(value);
+        end
+    end
+
+    % Component initialization
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Create UIFigure and hide until all components are created
+            app.UIFigure = uifigure('Visible', 'off');
+            app.UIFigure.Position = [100 100 640 480];
+            app.UIFigure.Name = 'MATLAB App';
+
+            % Create UIAxes
+            app.UIAxes = uiaxes(app.UIFigure);
+            title(app.UIAxes, 'Title')
+            xlabel(app.UIAxes, 'X')
+            ylabel(app.UIAxes, 'Y')
+            zlabel(app.UIAxes, 'Z')
+            app.UIAxes.Position = [1 104 333 332];
+
+            % Create joint_6SliderLabel
+            app.joint_6SliderLabel = uilabel(app.UIFigure);
+            app.joint_6SliderLabel.HorizontalAlignment = 'right';
+            app.joint_6SliderLabel.Position = [360 155 41 22];
+            app.joint_6SliderLabel.Text = 'joint_6';
+
+            % Create joint_6Slider
+            app.joint_6Slider = uislider(app.UIFigure);
+            app.joint_6Slider.Limits = [-3.15 3.15];
+            app.joint_6Slider.ValueChangingFcn = createCallbackFcn(app, @joint_6SliderValueChanging, true);
+            app.joint_6Slider.Position = [422 164 200 3];
+
+            % Create Joint_2SliderLabel
+            app.Joint_2SliderLabel = uilabel(app.UIFigure);
+            app.Joint_2SliderLabel.HorizontalAlignment = 'right';
+            app.Joint_2SliderLabel.Position = [357 375 44 22];
+            app.Joint_2SliderLabel.Text = {'Joint_2'; ''};
+
+            % Create Joint_2Slider
+            app.Joint_2Slider = uislider(app.UIFigure);
+            app.Joint_2Slider.Limits = [-3.15 3.15];
+            app.Joint_2Slider.ValueChangingFcn = createCallbackFcn(app, @Joint_2SliderValueChanging, true);
+            app.Joint_2Slider.Position = [422 384 200 3];
+
+            % Create joint_1SliderLabel
+            app.joint_1SliderLabel = uilabel(app.UIFigure);
+            app.joint_1SliderLabel.HorizontalAlignment = 'right';
+            app.joint_1SliderLabel.Position = [360 433 41 22];
+            app.joint_1SliderLabel.Text = 'joint_1';
+
+            % Create joint_1Slider
+            app.joint_1Slider = uislider(app.UIFigure);
+            app.joint_1Slider.Limits = [-3.15 3.15];
+            app.joint_1Slider.ValueChangingFcn = createCallbackFcn(app, @joint_1SliderValueChanging, true);
+            app.joint_1Slider.Position = [422 442 200 3];
+
+            % Create joint_3SliderLabel
+            app.joint_3SliderLabel = uilabel(app.UIFigure);
+            app.joint_3SliderLabel.HorizontalAlignment = 'right';
+            app.joint_3SliderLabel.Position = [360 317 41 22];
+            app.joint_3SliderLabel.Text = {'joint_3'; ''};
+
+            % Create joint_3Slider
+            app.joint_3Slider = uislider(app.UIFigure);
+            app.joint_3Slider.Limits = [-3.15 3.15];
+            app.joint_3Slider.ValueChangingFcn = createCallbackFcn(app, @joint_3SliderValueChanging, true);
+            app.joint_3Slider.Position = [422 326 200 3];
+
+            % Create joint_5SliderLabel
+            app.joint_5SliderLabel = uilabel(app.UIFigure);
+            app.joint_5SliderLabel.HorizontalAlignment = 'right';
+            app.joint_5SliderLabel.Position = [360 208 41 22];
+            app.joint_5SliderLabel.Text = {'joint_5'; ''};
+
+            % Create joint_5Slider
+            app.joint_5Slider = uislider(app.UIFigure);
+            app.joint_5Slider.Limits = [-3.15 3.15];
+            app.joint_5Slider.ValueChangingFcn = createCallbackFcn(app, @joint_5SliderValueChanging, true);
+            app.joint_5Slider.Position = [422 217 200 3];
+
+            % Create joint_4SliderLabel
+            app.joint_4SliderLabel = uilabel(app.UIFigure);
+            app.joint_4SliderLabel.HorizontalAlignment = 'right';
+            app.joint_4SliderLabel.Position = [360 260 41 22];
+            app.joint_4SliderLabel.Text = {'joint_4'; ''};
+
+            % Create joint_4Slider
+            app.joint_4Slider = uislider(app.UIFigure);
+            app.joint_4Slider.Limits = [-3.15 3.15];
+            app.joint_4Slider.ValueChangingFcn = createCallbackFcn(app, @joint_4SliderValueChanging, true);
+            app.joint_4Slider.Position = [422 269 200 3];
+
+            % Create FKIKButtonGroup
+            app.FKIKButtonGroup = uibuttongroup(app.UIFigure);
+            app.FKIKButtonGroup.Title = 'FK/IK';
+            app.FKIKButtonGroup.Position = [360 16 128 89];
+
+            % Create FKButton
+            app.FKButton = uitogglebutton(app.FKIKButtonGroup);
+            app.FKButton.Text = 'FK';
+            app.FKButton.Position = [11 36 100 22];
+            app.FKButton.Value = true;
+
+            % Create IKButton
+            app.IKButton = uitogglebutton(app.FKIKButtonGroup);
+            app.IKButton.Text = 'IK';
+            app.IKButton.Position = [11 15 100 22];
+
+            % Create Ros_INITButton
+            app.Ros_INITButton = uibutton(app.UIFigure, 'state');
+            app.Ros_INITButton.ValueChangedFcn = createCallbackFcn(app, @Ros_INITButtonValueChanged, true);
+            app.Ros_INITButton.Text = 'Ros_INIT';
+            app.Ros_INITButton.Position = [107 33 156 37];
+
+            % Create MasterSlaveButtonGroup_2
+            app.MasterSlaveButtonGroup_2 = uibuttongroup(app.UIFigure);
+            app.MasterSlaveButtonGroup_2.SelectionChangedFcn = createCallbackFcn(app, @MasterSlaveButtonGroup_2SelectionChanged, true);
+            app.MasterSlaveButtonGroup_2.Title = 'Master/Slave';
+            app.MasterSlaveButtonGroup_2.Position = [494 16 128 89];
+
+            % Create masterButton_2
+            app.masterButton_2 = uitogglebutton(app.MasterSlaveButtonGroup_2);
+            app.masterButton_2.Text = 'master';
+            app.masterButton_2.Position = [11 36 100 22];
+            app.masterButton_2.Value = true;
+
+            % Create slaveButton_2
+            app.slaveButton_2 = uitogglebutton(app.MasterSlaveButtonGroup_2);
+            app.slaveButton_2.Text = 'slave';
+            app.slaveButton_2.Position = [11 15 100 22];
+
+            % Create URDFpathEditFieldLabel
+            app.URDFpathEditFieldLabel = uilabel(app.UIFigure);
+            app.URDFpathEditFieldLabel.HorizontalAlignment = 'right';
+            app.URDFpathEditFieldLabel.Position = [72 442 66 22];
+            app.URDFpathEditFieldLabel.Text = {'URDF path'; ''};
+
+            % Create URDFpathEditField
+            app.URDFpathEditField = uieditfield(app.UIFigure, 'text');
+            app.URDFpathEditField.ValueChangedFcn = createCallbackFcn(app, @URDFpathEditFieldValueChanged, true);
+            app.URDFpathEditField.Position = [153 442 100 22];
+
+            % Show the figure after all components are created
+            app.UIFigure.Visible = 'on';
+        end
+    end
+
+    % App creation and deletion
+    methods (Access = public)
+
+        % Construct app
+        function app = UI
+
+            % Create UIFigure and components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end]]></w:t></w:r></w:p></w:body></w:document>

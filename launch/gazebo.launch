@@ -1,0 +1,58 @@
+<launch>
+  <include
+    file="$(find gazebo_ros)/launch/empty_world.launch" />
+  
+  <param
+    name="robot_description"
+    textfile="$(find abb_irb140_support)/urdf/irb140.urdf" />
+
+  <node
+    name="tf_footprint_base"
+    pkg="tf"
+    type="static_transform_publisher"
+    args="0 0 0 0 0 0 base_link base_footprint 40" />
+
+  <node
+    name="spawn_model"
+    pkg="gazebo_ros"
+    type="spawn_model"
+    args="-file $(find abb_irb140_support)/urdf/irb140.urdf -urdf -model irb140"
+    output="screen" />
+
+  <node
+    name="fake_joint_calibration"
+    pkg="rostopic"
+    type="rostopic"
+    args="pub /calibrated std_msgs/Bool true" />
+  
+      <!-- Load controllers to ros parameter server -->
+    <rosparam file="$(find abb_irb140_support)/config/velocity_controllers.yaml" command="load"/>
+
+    <!-- Joint state publisher-->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+    
+    <!-- Load controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/abb_irb140" args="joint1_position_controller_1 
+                                                   joint2_position_controller_1
+                                                   joint3_position_controller_1
+                                                   joint4_position_controller_1
+                                                   joint5_position_controller_1
+                                                   joint6_position_controller_1
+                                                   joint1_position_controller_2
+                                                   joint2_position_controller_2
+                                                   joint3_position_controller_2
+                                                   joint4_position_controller_2
+                                                   joint5_position_controller_2
+                                                   joint6_position_controller_2
+                                                   joint_state_controller"/>
+    
+   <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+    <remap from="/joint_states" to="/abb_irb140/joint_states" />
+  </node>
+
+</launch>
+

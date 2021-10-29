@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<appProperties xmlns="http://schemas.mathworks.com/matlab/app/2012/appProperties" signature="D65E8CC37FE25220A47D729BB6256B06B5498A24">
+
+  <entryPoint>UI</entryPoint>
+
+  <name>ABB_IRB140_UI</name>
+
+  <version>1.0</version>
+
+  <createdByMATLABRelease>(R2021a)</createdByMATLABRelease>
+
+  <GUID>30cea162-cad0-4bbf-b324-8f6fab6d65e7</GUID>
+
+  <author>
+    <name>AD</name>
+    <contact></contact>
+    <organization></organization>
+  </author>
+
+  <supportedPlatforms/>
+
+  <requiredProducts/>
+
+  <numFiles>1</numFiles>
+
+  <created>2021-10-02T06:47:11Z</created>
+
+  <appEntries>
+    <appFile>/UI.mlapp</appFile>
+  </appEntries>
+
+</appProperties>
