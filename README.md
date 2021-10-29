@@ -1,6 +1,7 @@
-# abb_irb140_support
+# abb_irb140 cobot simulation environment
 
-ABB irb 140 robot support package, for ROS Visualizer.
+ABB irb 140 cobot simulation environment with a matlab
+application to control the bots
 
 This package contains the collision and visual models, as well as the URDF and xacro files.
 
